@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Service Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #E4C5AF;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      background: #8C4A3E;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      position: absolute;
+      right: 20px;
+    }
+    .main-container {
+      display: flex;
+      flex: 1;
+    }
+    .sidebar {
+      width: 220px;
+      background: #5C3D31;
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .sidebar-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .sidebar-subtitle {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #F6E6D8;
+    }
+    .button {
+      padding: 10px 20px;
+      background: #A6655F;
+      border: none;
+      cursor: pointer;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+    }
+    .button:hover {
+      background: #8C4A3E;
+    }
+    .content {
+      flex: 1;
+      padding: 20px;
+      background: #F6E6D8;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .ticket-item {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+    .ticket-item:hover {
+      background: #E0C1A3;
+    }
+    .logout-button {
+      align-self: center;
+      margin-top: auto;
+    }
+    .reply-section {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    Customer Service Dashboard
+    <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-pic">
+  </div>
+  <div class="main-container">
+    <div class="sidebar">
+      <div class="sidebar-title">Aahar Link</div>
+      <div class="sidebar-subtitle">Customer Service Dashboard</div>
+      <button class="button" onclick="loadTickets('open')">View Open Complaints</button>
+      <button class="button" onclick="loadTickets('resolved')">View Resolved Complaints</button>
+      <div id="ticket-list"></div>
+      <button class="button logout-button" onclick="logout()">Logout</button>
+    </div>
+    <div class="content">
+      <div class="card">
+        <h3>Ticket Details</h3>
+        <div id="ticket-details">Select a complaint to view details.</div>
+        <div class="reply-section" id="reply-section">
+          <h4>Reply:</h4>
+          <textarea id="reply-text" rows="4" cols="50" placeholder="Type your reply here..."></textarea>
+          <br>
+          <select id="status">
+            <option value="Resolved">Resolved</option>
+            <option value="Open">Open</option>
+          </select>
+          <button class="button" onclick="submitReply()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tickets = {
+      open: [
+        { id: 101, user: "Donor/Receiver", date: "2025-03-18", status: "Open", description: "Food issue" },
+        { id: 102, user: "Donor/Receiver", date: "2025-03-17", status: "Open", description: "Delivery delay" }
+      ],
+      resolved: []
+    };
+    
+    function loadTickets(status) {
+      const list = document.getElementById("ticket-list");
+      list.innerHTML = "";
+      tickets[status].forEach(ticket => {
+        const div = document.createElement("div");
+        div.className = "ticket-item";
+        div.innerText = `#${ticket.id} - ${ticket.description}`;
+        div.onclick = () => showTicket(ticket);
+        list.appendChild(div);
+      });
+    }
+    
+    function showTicket(ticket) {
+      document.getElementById("ticket-details").innerHTML = `
+        <p><strong>Ticket ID:</strong> ${ticket.id}</p>
+        <p><strong>User:</strong> ${ticket.user}</p>
+        <p><strong>Date:</strong> ${ticket.date}</p>
+        <p><strong>Status:</strong> ${ticket.status}</p>
+        <p><strong>Description:</strong> ${ticket.description}</p>
+      `;
+      document.getElementById("reply-section").style.display = "block";
+    }
+
+    function submitReply() {
+      const status = document.getElementById("status").value;
+      if (status === "Resolved") {
+        const ticket = tickets.open.shift();
+        ticket.status = "Resolved";
+        tickets.resolved.push(ticket);
+      }
+      alert("Reply submitted successfully!");
+      loadTickets("open");
+    }
+
+    function logout() {
+      if (confirm("Are you sure you want to logout?")) {
+        alert("You have been logged out.");
+        window.location.href = "/customer_login.html";
+      }
+    }
+  </script>
+</body>
+</html>

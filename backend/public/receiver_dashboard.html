@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Receiver Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sidebar {
+      width: 250px;
+      background-color: #075261;
+    }
+    .bg-opacity {
+      background-color: rgba(11, 70, 74, 0.6);
+    }
+  </style>
+</head>
+<body class="flex bg-opacity text-white">
+  <!-- Sidebar -->
+  <aside class="sidebar text-white p-5 min-h-screen">
+    <h2 class="text-3xl font-bold">Aahar Link</h2>
+    <p class="text-sm mb-5">Receiver Portal</p>
+    <nav>
+      <ul>
+        <li class="py-2"><a href="#" class="block">🏠 Dashboard</a></li>
+        <li class="py-2"><a href="#" class="block">📦 Requested Items</a></li>
+        <li class="py-2"><a href="#" class="block">⚙️ Settings</a></li>
+        <!-- Logout Button -->
+        <li class="py-52 mt-4"></li>
+        <div class="mt-auto flex justify-center pb-4">
+          <button id="logout-btn" class="bg-blue-500 text-white px-4 py-2 rounded w-32">
+            Logout
+        </button>
+        </div>
+      </ul>
+    </nav>
+  </aside>
+
+  <script>
+    document.getElementById("logout-btn").addEventListener("click", function () {
+      if (confirm("Are you sure you want to log out?")) {
+        console.log("User logged out.");
+        alert("You have been logged out.");
+        window.location.href = "/receiver_login.html";
+      }
+    });
+  </script>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6">
+    <header class="flex justify-between items-center mb-5">
+      <h1 class="text-2xl font-bold">Receiver Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <span class="relative text-red-500">
+          🔔<span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
+        </span>
+        <span class="bg-[#74A57F] text-white px-3 py-1 rounded-full">R</span>
+      </div>
+    </header>
+
+    <!-- Receiver Details Section -->
+    <div class="bg-white p-4 rounded-lg shadow-md mt-5 text-black">
+      <h2 class="text-xl font-bold mb-3">Receiver Details</h2>
+      <p><strong>Name of NPO:</strong> <span id="npo-name">Loading...</span></p>
+      <!-- Default address set to "Verify First" -->
+      <p><strong>Address:</strong> <span id="npo-address">Verify First</span></p>
+      
+      <!-- Verification Button -->
+      <button id="verifyNow" class="w-full mt-3 bg-blue-500 text-white py-2 rounded">
+        Verify Now
+      </button>
+      <p id="verify-status" class="text-red-500 text-sm mt-2 hidden">⚠️ Failed to start verification.</p>
+    </div>
+
+    <!-- Available Food Listings -->
+    <div class="bg-white p-4 rounded-lg shadow-md mt-5 text-black">
+      <h2 class="text-xl font-bold mb-3">Available Food Listings</h2>
+      <table id="food-listings" class="w-full text-left border-collapse">
+        <thead>
+          <tr>
+            <th class="border-b p-2">Title</th>
+            <th class="border-b p-2">Type</th>
+            <th class="border-b p-2">Quantity</th>
+            <th class="border-b p-2">Expiry Date</th>
+            <th class="border-b p-2">Restaurant</th>
+            <th class="border-b p-2">Request</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Listings will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Requested Food Section -->
+    <div class="bg-white p-4 rounded-lg shadow-md mt-5 text-black">
+      <h2 class="text-xl font-bold mb-3">Your Requests</h2>
+      <table id="request-list" class="w-full text-left border-collapse">
+        <thead>
+          <tr>
+            <th class="border-b p-2">Food Item</th>
+            <th class="border-b p-2">Restaurant</th>
+            <th class="border-b p-2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Requests will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Include receiver.js for handling verification and other functions -->
+  <script src="receiver.js"></script>
+
+  <!-- Other inline scripts for food listings -->
+  <script>
+    // Fetch food listings from a simulated API response
+    function fetchFoodListings() {
+      const listings = [
+        { id: 1, title: "Rice & Curry", type: "Veg", quantity: "5 kg", expiry: "2025-03-15", restaurant: "Green Eats" },
+        { id: 2, title: "Chicken Biryani", type: "Non-Veg", quantity: "3 kg", expiry: "2025-03-16", restaurant: "Tandoori House" }
+      ];
+
+      const tableBody = document.querySelector("#food-listings tbody");
+      tableBody.innerHTML = "";
+
+      listings.forEach(listing => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="p-2">${listing.title}</td>
+          <td class="p-2 ${listing.type === 'Veg' ? 'text-green-500' : 'text-red-500'}">${listing.type}</td>
+          <td class="p-2">${listing.quantity}</td>
+          <td class="p-2">${listing.expiry}</td>
+          <td class="p-2">${listing.restaurant}</td>
+          <td class="p-2">
+            <button class="bg-blue-500 text-white px-2 py-1 rounded request-btn" data-id="${listing.id}" data-title="${listing.title}" data-restaurant="${listing.restaurant}">Request</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      document.querySelectorAll(".request-btn").forEach(button => {
+        button.addEventListener("click", function () {
+          const foodID = this.dataset.id;
+          const title = this.dataset.title;
+          const restaurant = this.dataset.restaurant;
+          sendFoodRequest(foodID, title, restaurant);
+        });
+      });
+    }
+
+    function sendFoodRequest(foodID, title, restaurant) {
+      const requestList = document.querySelector("#request-list tbody");
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="p-2">${title}</td>
+        <td class="p-2">${restaurant}</td>
+        <td class="p-2 text-yellow-500">Pending</td>
+      `;
+      requestList.appendChild(row);
+      console.log(`Request sent for Food ID: ${foodID}`);
+    }
+
+    // Initialize food listings on page load
+    document.addEventListener("DOMContentLoaded", function () {
+      fetchFoodListings();
+    });
+  </script>
+</body>
+</html>
+
+
+
