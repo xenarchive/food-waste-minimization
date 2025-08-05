@@ -1,73 +1,81 @@
-# 🍱 Aahar Link — Bridging Hunger with Surplus
+# 🍽️ Aahar Link
 
-Aahar Link is a full-stack web application that connects food donors (such as restaurants, cafes, and households) with receivers (NGOs, shelters, and individuals in need). By facilitating real-time food sharing and logistics, it aims to reduce food waste and ensure edible surplus food reaches those who need it most.
-
----
-
-## 🚀 Key Features
-
-### 👨‍🍳 Donor Dashboard
-- Post surplus food listings with quantity, expiry time, and pickup details
-- Approve incoming requests from verified receivers
-- Track past donations and complaints
-- Real-time rating updates based on receiver feedback
-
-### 🧍 Receiver Dashboard
-- Browse available food listings
-- Send real-time requests to donors
-- Get notified instantly upon approval (includes donor contact and location)
-- Rate donors post pickup to ensure quality and reliability
-
-### 🔔 Real-Time Notifications
-- WebSockets or dynamic polling to instantly reflect new approvals, messages, and status updates for both donors and receivers.
-
-### 📊 Dynamic Rating System
-- Receiver can rate donors after each donation
-- Donor ratings update dynamically on their profile cards
-
-### 🖼️ Hero Section (Landing Page)
-- Responsive carousel with images and call-to-actions
-- Sections like "What We Do" and "How Can You Help?" to onboard new users
+**Aahar Link** is a web-based food redistribution platform that connects surplus food donors (e.g., restaurants, individuals) with verified receivers (NGOs, shelters). It aims to combat food waste and support food security by building a reliable and real-time bridge between the two.
 
 ---
 
-## 🧠 Future AI/ML Integrations (Planned)
+## 🚀 Features
 
-- **Donation Demand Prediction** using historical trends
-- **Smart Matching Engine** to pair specific types of food with high-need zones
-- **Food Freshness Prediction** based on listing timestamps and categories
+### 👤 Role-Based Interfaces
+- **Donor Portal**
+  - `donor_login.html` & `donor_dashboard.html`
+  - Post food donations, track status, and view request history
+- **Receiver Portal**
+  - `receiver_login.html` & `receiver_dashboard.html`
+  - Browse active listings, request food, rate donors
+- **Customer (Admin/Coordinator) View**
+  - Moderate the ecosystem, verify users, manage conflicts
+
+### 📩 Dynamic Features
+- JavaScript-powered real-time DOM updates
+- Form validation and responsive interactions
+- Individual CSS + JS logic per role for modularity
 
 ---
 
 ## 🛠 Tech Stack
 
-| Tech        | Description                           |
-|-------------|---------------------------------------|
-| **MongoDB** | NoSQL database for storing users, listings, and ratings |
-| **Express.js** | Backend REST API & authentication logic |
-| **React**   | Interactive front-end SPA for both donor and receiver views |
-| **Node.js** | Server-side runtime environment |
-| **Tailwind CSS** | Rapid UI styling with utility-first classes |
-| **Vanilla JS** | Real-time DOM updates and form validations |
-| **Socket.io / Polling** | Real-time updates and notifications |
-| **Vite** | Lightning-fast React development setup |
+| Layer      | Stack / Tools                   |
+|------------|----------------------------------|
+| **Frontend** | HTML5, CSS3, Vanilla JS |
+| **Backend**  | Node.js, Express.js            |
+| **Data**     | JSON-based mocks (or plug MongoDB) |
+| **Foldering** | Role-based segregation (donor, receiver, customer) |
+| **Deployment** | Render / Node Hosting-ready |
 
 ---
 
-## 📦 Folder Structure
+## 🧩 Folder Structure
 
-```bash
-Aahar-Link/
-│
-├── client/                  # React frontend
-│   ├── pages/               # Home, Login, Dashboards
-│   ├── components/          # Navbar, Notifications, Cards
-│   └── assets/              # Images and icons
-│
-├── api/                     # Node.js + Express backend
-│   ├── routes/              # API routes for users, food, auth
-│   ├── controllers/         # Logic for handling requests
-│   ├── models/              # MongoDB schemas
-│   └── middleware/          # Auth, validation, etc.
+aahar-link/
+├── backend/
+│ └── public/
+│ ├── donor_login.html / donor_dashboard.html
+│ ├── receiver_login.html / receiver_dashboard.html
+│ ├── customer_login.html / customer_dashboard.html
+│ ├── donor.js / donor.css
+│ ├── receiver.js / receiver.css
+│ ├── customer.js / customer.css
 │
 └── README.md
+
+
+- Each role has its **dedicated HTML, JS, and CSS** files to ensure clean separation of logic and responsibilities.
+
+---
+
+## ⚙️ How to Run Locally
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/aahar-link.git
+cd aahar-link/backend
+
+# Install dependencies
+npm install
+
+# Start the server
+node server.js
+
+🎯 Goals & Impact
+Tackle hunger by bridging donors and those in need in real-time
+
+Minimize food waste through an accessible, tech-first approach
+
+Empower NGOs to directly reach food providers
+
+Simplify UX with clean dashboards per user role
+
+
+## 🧩 Folder Structure
+
